@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Notepad Yogik</title>
+
+<style>
+body{
+    background:#000814;
+    color:white;
+    font-family:Arial,sans-serif;
+}
+
+.title{
+    text-align:center;
+    font-size:32px;
+    margin:20px;
+    padding:15px;
+    border:1px solid #00aaff;
+    border-radius:15px;
+}
+
+.container{
+    display:flex;
+    gap:20px;
+    padding:20px;
+}
+
+.column{
+    flex:1;
+}
+
+.header{
+    background:white;
+    color:black;
+    text-align:center;
+    padding:10px;
+    border-radius:10px;
+    font-weight:bold;
+}
+
+.card{
+    background:black;
+    border:1px solid #222;
+    border-radius:15px;
+    padding:15px;
+    margin-top:15px;
+}
+
+.copy-btn{
+    background:#0099ff;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:10px;
+    cursor:pointer;
+}
+</style>
+
+</head>
+<body>
+
+<div class="title">📝 NOTEPAD YOGIK</div>
+
+<div class="container">
+
+<div class="column">
+    <div class="header">BONUS CASHBACK</div>
+
+    <div class="card">
+        <p id="text1">
+        Pembagian Bonus Kekalahan SLOT hanya diberikan setiap hari Jumat ya bosku.
+        </p>
+        <button class="copy-btn" onclick="copyText('text1')">COPY</button>
+    </div>
+</div>
+
+<div class="column">
+    <div class="header">GANGGUAN QRIS</div>
+
+    <div class="card">
+        <p id="text2">
+        Saat ini QRIS sedikit delay ya bosku, mohon ditunggu.
+        </p>
+        <button class="copy-btn" onclick="copyText('text2')">COPY</button>
+    </div>
+</div>
+
+</div>
+
+<script>
+function copyText(id){
+    let text=document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text);
+    alert("Teks berhasil disalin");
+}
+</script>
+
+</body>
+</html>
