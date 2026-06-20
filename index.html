@@ -19,7 +19,6 @@ color:#fff;
 padding:20px;
 }
 
-/* HEADER */
 .header{
 max-width:500px;
 margin:auto;
@@ -28,23 +27,52 @@ padding:15px;
 border-radius:15px;
 background:linear-gradient(90deg,#0a1638,#0e3e9d);
 border:1px solid #3ba7ff;
-box-shadow:0 0 20px rgba(0,140,255,.5);
 font-size:28px;
 font-weight:bold;
 margin-bottom:15px;
 }
 
-/* SEARCH */
 #search{
 width:100%;
 max-width:500px;
 display:block;
-margin:0 auto 20px auto;
+margin:0 auto 10px;
 padding:12px;
 border-radius:10px;
 border:none;
 font-size:16px;
 outline:none;
+}
+
+/* ADD BOX */
+.add-box{
+max-width:500px;
+margin:0 auto 20px;
+background:#081122;
+padding:15px;
+border-radius:12px;
+border:1px solid #16386d;
+}
+
+.add-box input,
+.add-box textarea{
+width:100%;
+margin-bottom:10px;
+padding:10px;
+border-radius:8px;
+border:none;
+outline:none;
+}
+
+.add-box button{
+width:100%;
+padding:10px;
+border:none;
+border-radius:8px;
+background:#00aaff;
+color:#fff;
+font-weight:bold;
+cursor:pointer;
 }
 
 /* CONTAINER */
@@ -54,87 +82,59 @@ grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
 gap:20px;
 }
 
-/* SECTION */
 .section{
 background:#081122;
 border:1px solid #16386d;
 border-radius:18px;
 padding:15px;
-box-shadow:0 0 15px rgba(0,120,255,.15);
 }
 
 .section-title{
-background:#fff;
-color:#111;
-padding:12px;
-border-radius:12px;
-font-size:22px;
-font-weight:bold;
 text-align:center;
-margin-bottom:15px;
+background:#fff;
+color:#000;
+padding:10px;
+border-radius:10px;
+font-weight:bold;
+margin-bottom:10px;
 }
 
-/* CARD */
 .card{
 background:#000;
 border:1px solid #1f2d4a;
 border-radius:15px;
 padding:15px;
-margin-bottom:12px;
 position:relative;
+margin-bottom:10px;
 }
 
 .card p{
-font-size:20px;
-line-height:1.4;
-padding-right:95px;
 white-space:pre-line;
+padding-right:90px;
 }
 
-/* BUTTON */
 .copy-btn{
 position:absolute;
-right:12px;
-bottom:12px;
+right:10px;
+bottom:10px;
+padding:8px 12px;
 border:none;
-padding:10px 16px;
-border-radius:10px;
-cursor:pointer;
-font-weight:bold;
+border-radius:8px;
+background:#00aaff;
 color:#fff;
-background:linear-gradient(90deg,#009dff,#4db8ff);
-transition:all .3s ease;
+cursor:pointer;
 }
 
-.copy-btn:hover{
-transform:scale(1.05);
-}
-
-/* TOAST */
 .toast{
 position:fixed;
 top:20px;
 right:20px;
-background:#00a651;
-padding:12px 18px;
+background:#00c853;
+padding:10px 15px;
 border-radius:10px;
-font-weight:bold;
 display:none;
-box-shadow:0 0 15px rgba(0,166,81,.5);
-z-index:999;
 }
 
-/* FOOTER */
-.footer{
-text-align:center;
-margin-top:25px;
-color:#8aa9ff;
-}
-
-@media(max-width:768px){
-.card p{font-size:18px;}
-.section-title{font-size:20px;}
-}
 </style>
 </head>
 
@@ -142,141 +142,89 @@ color:#8aa9ff;
 
 <div class="header">📝 NOTEPAD NESTOR</div>
 
-<input type="text" id="search" placeholder="🔍 Cari template...">
+<input id="search" placeholder="🔍 Cari template...">
 
-<div class="container">
-
-<!-- SECTION 1 -->
-<div class="section">
-<div class="section-title">LOCK PERTAMA KALI</div>
-
-<div class="card">
-<p id="txt1">
-BERI PERINGATAN BATASAN PASANG TOGEL 2D 3D 4D
-JIKA KEDAPATAN BETTING LEBIH BATAS 
-HANGUSKAN KEMENANGAN TOGEL DAN HANYA
-BISA BERMAIN SLOT ATAU LIVEGAME SAJA
-</p>
-<button class="copy-btn" onclick="copyText('txt1')">COPY</button>
+<!-- ADD TEMPLATE -->
+<div class="add-box">
+<input id="title" placeholder="Nama kategori (contoh: BONUS)">
+<textarea id="text" placeholder="Isi template..."></textarea>
+<button onclick="addTemplate()">+ TAMBAH TEMPLATE</button>
 </div>
 
-<div class="card">
-<p id="txt2">
-INVEST 2D, BERI PERINGATAN BATASAN PASANG
-TOGEL, JIKA KEDAPATAN BETTING LEBIH BATAS 
-HANGUSKAN KEMENANGAN TOGEL DAN HANYA
-BISA BERMAIN SLOT ATAU LIVEGAME SAJA
-</p>
-<button class="copy-btn" onclick="copyText('txt2')">COPY</button>
-</div>
+<div class="container" id="container"></div>
 
-</div>
-
-<!-- SECTION 2 -->
-<div class="section">
-<div class="section-title">SUDAH PERNAH DI PERINGATI</div>
-
-<div class="card">
-<p id="txt3">
-KET SEBELUMNYA SUDAH DI PERINGATI BATASAN LINE 2D 3D 4D 
-TIDAK TERIMA BETTING TOGEL LAGI HANYA BISA BERMAIN SLOT 
-DAN LIVE GAME SAJA
-</p>
-<button class="copy-btn" onclick="copyText('txt3')">COPY</button>
-</div>
-
-<div class="card">
-<p id="txt4">
-SUDAH DI PERINGATI SEBELUMNYA TIDAK BOLEH BETTING TOGEL
-HANYA BISA SLOT DAN LIVE GAME
-</p>
-<button class="copy-btn" onclick="copyText('txt4')">COPY</button>
-</div>
-
-</div>
-
-<!-- SECTION 3 -->
-<div class="section">
-<div class="section-title">INVEST SUDAH DI PERINGATI</div>
-
-<div class="card">
-<p id="txt5">
-INVEST 4D SEBELUMNYA SUDAH PERNAH DI PERINGATI
-TIDAK TERIMA BETTING TOGEL LAGI
-</p>
-<button class="copy-btn" onclick="copyText('txt5')">COPY</button>
-</div>
-
-<div class="card">
-<p id="txt6">
-KEMENANGAN DI HANGUSKAN KARENA MELANGGAR ATURAN
-</p>
-<button class="copy-btn" onclick="copyText('txt6')">COPY</button>
-</div>
-
-</div>
-
-<!-- SECTION 4 -->
-<div class="section">
-<div class="section-title">INDIKASI HKB</div>
-
-<div class="card">
-<p id="txt7">
-INVEST PASARAN HKB TIDAK TERIMA BETTING TOGEL LAGI
-HANGUSKAN KEMENANGAN HANYA BISA BERMAIN SLOT DAN LIVE 
-  SAJA 
-</p>
-<button class="copy-btn" onclick="copyText('txt7')">COPY</button>
-</div>
-
-<div class="card">
-<p id="txt8">
-INDIKASI INVEST PASARAN HKB BANTU PANTAU BETINGAN TOGEL ,
-  JIKA TIDAK TERMAKAN HANGUSKAN KEMENANGAN, TIDAK TERIMA 
-  BETING TOGEL LAGI HANYA BISA BERMAIN SLOT & LIVE GAME SAJA
-</p>
-<button class="copy-btn" onclick="copyText('txt8')">COPY</button>
-</div>
-
-</div>
-
-</div>
-
-<div class="toast" id="toast">✅ Teks berhasil disalin</div>
-
-<div class="footer">
-NOTEPAD NESTOR © <span id="year"></span>
-</div>
+<div class="toast" id="toast">Berhasil!</div>
 
 <script>
-// COPY FUNCTION
-function copyText(id){
-let text = document.getElementById(id).innerText;
 
-navigator.clipboard.writeText(text).then(() => {
-let toast = document.getElementById("toast");
-toast.style.display="block";
+let data = JSON.parse(localStorage.getItem("notes")) || [];
 
-setTimeout(()=>{
-toast.style.display="none";
-},2000);
+// render
+function render(){
+let container = document.getElementById("container");
+container.innerHTML = "";
+
+data.forEach((item, index)=>{
+container.innerHTML += `
+<div class="section">
+<div class="section-title">${item.title}</div>
+
+<div class="card">
+<p id="t${index}">${item.text}</p>
+<button class="copy-btn" onclick="copyText('t${index}')">COPY</button>
+</div>
+</div>
+`;
 });
 }
 
-// YEAR AUTO
-document.getElementById("year").textContent =
-new Date().getFullYear();
+render();
 
-// SEARCH FUNCTION
+// add template
+function addTemplate(){
+let title = document.getElementById("title").value;
+let text = document.getElementById("text").value;
+
+if(!title || !text) return alert("Isi lengkap dulu!");
+
+data.push({title, text});
+localStorage.setItem("notes", JSON.stringify(data));
+
+document.getElementById("title").value = "";
+document.getElementById("text").value = "";
+
+render();
+showToast("Template ditambahkan!");
+}
+
+// copy
+function copyText(id){
+let text = document.getElementById(id).innerText;
+navigator.clipboard.writeText(text);
+showToast("Disalin!");
+}
+
+// toast
+function showToast(msg){
+let toast = document.getElementById("toast");
+toast.innerText = msg;
+toast.style.display = "block";
+
+setTimeout(()=>{
+toast.style.display = "none";
+},2000);
+}
+
+// search
 document.getElementById("search").addEventListener("keyup", function(){
 let keyword = this.value.toLowerCase();
 let cards = document.querySelectorAll(".card");
 
-cards.forEach(card => {
-let text = card.innerText.toLowerCase();
-card.style.display = text.includes(keyword) ? "block" : "none";
+cards.forEach(card=>{
+card.style.display = card.innerText.toLowerCase().includes(keyword) ? "block" : "none";
 });
 });
+
 </script>
 
 </body>
