@@ -1,104 +1,279 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Notepad Nestor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOTEPAD NESTOR</title>
 
 <style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
 body{
-    background:#000814;
-    color:white;
-    font-family:Arial,sans-serif;
+background:#050816;
+color:#fff;
+padding:20px;
 }
 
-.title{
-    text-align:center;
-    font-size:32px;
-    margin:20px;
-    padding:15px;
-    border:1px solid #00aaff;
-    border-radius:15px;
-}
-
-.container{
-    display:flex;
-    gap:20px;
-    padding:20px;
-}
-
-.column{
-    flex:1;
-}
-
+/* HEADER */
 .header{
-    background:white;
-    color:black;
-    text-align:center;
-    padding:10px;
-    border-radius:10px;
-    font-weight:bold;
+max-width:500px;
+margin:auto;
+text-align:center;
+padding:15px;
+border-radius:15px;
+background:linear-gradient(90deg,#0a1638,#0e3e9d);
+border:1px solid #3ba7ff;
+box-shadow:0 0 20px rgba(0,140,255,.5);
+font-size:28px;
+font-weight:bold;
+margin-bottom:15px;
 }
 
+/* SEARCH */
+#search{
+width:100%;
+max-width:500px;
+display:block;
+margin:0 auto 20px auto;
+padding:12px;
+border-radius:10px;
+border:none;
+font-size:16px;
+outline:none;
+}
+
+/* CONTAINER */
+.container{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:20px;
+}
+
+/* SECTION */
+.section{
+background:#081122;
+border:1px solid #16386d;
+border-radius:18px;
+padding:15px;
+box-shadow:0 0 15px rgba(0,120,255,.15);
+}
+
+.section-title{
+background:#fff;
+color:#111;
+padding:12px;
+border-radius:12px;
+font-size:22px;
+font-weight:bold;
+text-align:center;
+margin-bottom:15px;
+}
+
+/* CARD */
 .card{
-    background:black;
-    border:1px solid #222;
-    border-radius:15px;
-    padding:15px;
-    margin-top:15px;
+background:#000;
+border:1px solid #1f2d4a;
+border-radius:15px;
+padding:15px;
+margin-bottom:12px;
+position:relative;
 }
 
+.card p{
+font-size:20px;
+line-height:1.4;
+padding-right:95px;
+white-space:pre-line;
+}
+
+/* BUTTON */
 .copy-btn{
-    background:#0099ff;
-    color:white;
-    border:none;
-    padding:10px 15px;
-    border-radius:10px;
-    cursor:pointer;
+position:absolute;
+right:12px;
+bottom:12px;
+border:none;
+padding:10px 16px;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+color:#fff;
+background:linear-gradient(90deg,#009dff,#4db8ff);
+transition:all .3s ease;
+}
+
+.copy-btn:hover{
+transform:scale(1.05);
+}
+
+/* TOAST */
+.toast{
+position:fixed;
+top:20px;
+right:20px;
+background:#00a651;
+padding:12px 18px;
+border-radius:10px;
+font-weight:bold;
+display:none;
+box-shadow:0 0 15px rgba(0,166,81,.5);
+z-index:999;
+}
+
+/* FOOTER */
+.footer{
+text-align:center;
+margin-top:25px;
+color:#8aa9ff;
+}
+
+@media(max-width:768px){
+.card p{font-size:18px;}
+.section-title{font-size:20px;}
 }
 </style>
-
 </head>
+
 <body>
 
-<div class="title">📝 NOTEPAD Nestor</div>
+<div class="header">📝 NOTEPAD NESTOR</div>
+
+<input type="text" id="search" placeholder="🔍 Cari template...">
 
 <div class="container">
 
-<div class="column">
-    <div class="header">Togel lock</div>
+<!-- SECTION 1 -->
+<div class="section">
+<div class="section-title">LOCK PERTAMA KALI</div>
 
-    <div class="card">
-        <p id="text1">
-        BERI PERINGATAN BATASAN PASANG TOGEL 2D 3D 4D
+<div class="card">
+<p id="txt1">
+BERI PERINGATAN BATASAN PASANG TOGEL 2D 3D 4D
 JIKA KEDAPATAN BETTING LEBIH BATAS 
 HANGUSKAN KEMENANGAN TOGEL DAN HANYA
 BISA BERMAIN SLOT ATAU LIVEGAME SAJA
-        </p>
-        <button class="copy-btn" onclick="copyText('text1')">COPY</button>
-    </div>
+</p>
+<button class="copy-btn" onclick="copyText('txt1')">COPY</button>
 </div>
 
-<div class="column">
-    <div class="header">GANGGUAN QRIS</div>
-
-    <div class="card">
-        <p id="text2">
-        KET SEBELUM NYA SUDAH DI PERINGATI BATASAN LINE 2D 3D 4D
-TIDAK TERIMA BETING TOGEL LAGI HANYA BISA BERMAIN SLOT 
-DAN LIVE GAME SAJA 
-        </p>
-        <button class="copy-btn" onclick="copyText('text2')">COPY</button>
-    </div>
+<div class="card">
+<p id="txt2">
+INVEST 2D, BERI PERINGATAN BATASAN PASANG
+TOGEL, JIKA KEDAPATAN BETTING LEBIH BATAS 
+HANGUSKAN KEMENANGAN TOGEL DAN HANYA
+BISA BERMAIN SLOT ATAU LIVEGAME SAJA
+</p>
+<button class="copy-btn" onclick="copyText('txt2')">COPY</button>
 </div>
 
+</div>
+
+<!-- SECTION 2 -->
+<div class="section">
+<div class="section-title">SUDAH PERNAH DI PERINGATI</div>
+
+<div class="card">
+<p id="txt3">
+KET SEBELUMNYA SUDAH DI PERINGATI BATASAN LINE 2D 3D 4D 
+TIDAK TERIMA BETTING TOGEL LAGI HANYA BISA BERMAIN SLOT 
+DAN LIVE GAME SAJA
+</p>
+<button class="copy-btn" onclick="copyText('txt3')">COPY</button>
+</div>
+
+<div class="card">
+<p id="txt4">
+SUDAH DI PERINGATI SEBELUMNYA TIDAK BOLEH BETTING TOGEL
+HANYA BISA SLOT DAN LIVE GAME
+</p>
+<button class="copy-btn" onclick="copyText('txt4')">COPY</button>
+</div>
+
+</div>
+
+<!-- SECTION 3 -->
+<div class="section">
+<div class="section-title">INVEST SUDAH DI PERINGATI</div>
+
+<div class="card">
+<p id="txt5">
+INVEST 4D SEBELUMNYA SUDAH PERNAH DI PERINGATI
+TIDAK TERIMA BETTING TOGEL LAGI
+</p>
+<button class="copy-btn" onclick="copyText('txt5')">COPY</button>
+</div>
+
+<div class="card">
+<p id="txt6">
+KEMENANGAN DI HANGUSKAN KARENA MELANGGAR ATURAN
+</p>
+<button class="copy-btn" onclick="copyText('txt6')">COPY</button>
+</div>
+
+</div>
+
+<!-- SECTION 4 -->
+<div class="section">
+<div class="section-title">INDIKASI HKB</div>
+
+<div class="card">
+<p id="txt7">
+INVEST PASARAN HKB TIDAK TERIMA BETTING TOGEL
+HANYA SLOT DAN LIVE GAME
+</p>
+<button class="copy-btn" onclick="copyText('txt7')">COPY</button>
+</div>
+
+<div class="card">
+<p id="txt8">
+INDIKASI PEMAIN HKB MELANGGAR ATURAN BETTING
+</p>
+<button class="copy-btn" onclick="copyText('txt8')">COPY</button>
+</div>
+
+</div>
+
+</div>
+
+<div class="toast" id="toast">✅ Teks berhasil disalin</div>
+
+<div class="footer">
+NOTEPAD NESTOR © <span id="year"></span>
 </div>
 
 <script>
+// COPY FUNCTION
 function copyText(id){
-    let text=document.getElementById(id).innerText;
-    navigator.clipboard.writeText(text);
-    alert("Teks berhasil disalin");
+let text = document.getElementById(id).innerText;
+
+navigator.clipboard.writeText(text).then(() => {
+let toast = document.getElementById("toast");
+toast.style.display="block";
+
+setTimeout(()=>{
+toast.style.display="none";
+},2000);
+});
 }
+
+// YEAR AUTO
+document.getElementById("year").textContent =
+new Date().getFullYear();
+
+// SEARCH FUNCTION
+document.getElementById("search").addEventListener("keyup", function(){
+let keyword = this.value.toLowerCase();
+let cards = document.querySelectorAll(".card");
+
+cards.forEach(card => {
+let text = card.innerText.toLowerCase();
+card.style.display = text.includes(keyword) ? "block" : "none";
+});
+});
 </script>
 
 </body>
