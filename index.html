@@ -1,163 +1,8 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NOTEPAD NESTOR</title>
-
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Segoe UI',sans-serif;
-}
-
-body{
-background:#050816;
-color:#fff;
-padding:20px;
-}
-
-.header{
-max-width:500px;
-margin:auto;
-text-align:center;
-padding:15px;
-border-radius:15px;
-background:linear-gradient(90deg,#0a1638,#0e3e9d);
-border:1px solid #3ba7ff;
-font-size:28px;
-font-weight:bold;
-margin-bottom:15px;
-}
-
-#search{
-width:100%;
-max-width:500px;
-display:block;
-margin:0 auto 10px;
-padding:12px;
-border-radius:10px;
-border:none;
-font-size:16px;
-outline:none;
-}
-
-/* ADD BOX */
-.add-box{
-max-width:500px;
-margin:0 auto 20px;
-background:#081122;
-padding:15px;
-border-radius:12px;
-border:1px solid #16386d;
-}
-
-.add-box input,
-.add-box textarea{
-width:100%;
-margin-bottom:10px;
-padding:10px;
-border-radius:8px;
-border:none;
-outline:none;
-}
-
-.add-box button{
-width:100%;
-padding:10px;
-border:none;
-border-radius:8px;
-background:#00aaff;
-color:#fff;
-font-weight:bold;
-cursor:pointer;
-}
-
-/* CONTAINER */
-.container{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:20px;
-}
-
-.section{
-background:#081122;
-border:1px solid #16386d;
-border-radius:18px;
-padding:15px;
-cursor;
-transition:.2s;
-}
-
-.section{
-transform(-2px);
-box-shadow:0 0 10px rgba(0,170,255,.4);
-}
-
-
-.card{
-background:#000;
-border:1px solid #1f2d4a;
-border-radius:15px;
-padding:15px;
-position:relative;
-margin-bottom:10px;
-}
-
-.card p{
-white-space:pre-line;
-padding-right:90px;
-}
-
-.copy-btn{
-position:absolute;
-right:10px;
-bottom:10px;
-padding:8px 12px;
-border:none;
-border-radius:8px;
-background:#00aaff;
-color:#fff;
-cursor:pointer;
-}
-
-.toast{
-position:fixed;
-top:20px;
-right:20px;
-background:#00c853;
-padding:10px 15px;
-border-radius:10px;
-display:none;
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="header">📝 NOTEPAD NESTOR</div>
-
-<input id="search" placeholder="🔍 Cari template...">
-
-<!-- ADD TEMPLATE -->
-<div class="add-box">
-<input id="title" placeholder="Nama kategori (contoh: BONUS)">
-<textarea id="text" placeholder="Isi template..."></textarea>
-<button onclick="addTemplate()">+ TAMBAH TEMPLATE</button>
-</div>
-
-<div class="container" id="container"></div>
-
-<div class="toast" id="toast">Berhasil!</div>
-
 <script>
 
 let data = JSON.parse(localStorage.getItem("notes")) || [];
 
-// render
+// RENDER
 function render(){
 
 let container = document.getElementById("container");
@@ -166,7 +11,6 @@ container.innerHTML = "";
 data.forEach((item,index)=>{
 
 container.innerHTML += `
-
 <div class="section"
 draggable="true"
 data-index="${index}"
@@ -182,87 +26,90 @@ ondrop="drop(event)">
 
 <button class="copy-btn"
 onclick="copyText('t${index}')">
-COPY </button>
+COPY
+</button>
 
 <button class="copy-btn"
 style="bottom:50px;background:#ff9800;"
 onclick="editTemplate(${index})">
-EDIT </button>
+EDIT
+</button>
 
 <button class="copy-btn"
 style="bottom:90px;background:#f44336;"
 onclick="deleteTemplate(${index})">
-HAPUS </button>
+HAPUS
+</button>
 
 </div>
 </div>
 `;
+
 });
 
 }
 
+// ADD TEMPLATE
+function addTemplate(){
 
-data.forEach((item, index)=>{
-container.innerHTML += `
-<div class="section">
-<div class="section-title">${item.title}</div>
+let title = document.getElementById("title").value.trim();
+let text = document.getElementById("text").value.trim();
 
-<div class="card">
-<p id="t${index}">${item.text}</p>
-<button class="copy-btn" onclick="copyText('t${index}')">COPY</button>
-</div>
-</div>
-`;
-});
+if(!title || !text){
+alert("Isi lengkap dulu!");
+return;
 }
+
+data.push({title,text});
+
+localStorage.setItem("notes", JSON.stringify(data));
+
+document.getElementById("title").value = "";
+document.getElementById("text").value = "";
 
 render();
+showToast("Template ditambahkan");
 
-// add template
+}
+
+// EDIT
 function editTemplate(index){
 
-let newTitle =
-prompt("Edit Judul", data[index].title);
-
+let newTitle = prompt("Edit Judul", data[index].title);
 if(newTitle === null) return;
 
-let newText =
-prompt("Edit Template", data[index].text);
-
+let newText = prompt("Edit Template", data[index].text);
 if(newText === null) return;
 
 data[index].title = newTitle;
 data[index].text = newText;
 
-localStorage.setItem(
-"notes",
-JSON.stringify(data)
-);
+localStorage.setItem("notes", JSON.stringify(data));
 
 render();
 showToast("Template diperbarui");
+
 }
 
+// DELETE
 function deleteTemplate(index){
 
 if(!confirm("Hapus template ini?")) return;
 
 data.splice(index,1);
 
-localStorage.setItem(
-"notes",
-JSON.stringify(data)
-);
+localStorage.setItem("notes", JSON.stringify(data));
 
 render();
 showToast("Template dihapus");
+
 }
 
+// DRAG
 let dragIndex = null;
 
 function drag(ev){
-dragIndex =
-Number(ev.currentTarget.dataset.index);
+dragIndex = Number(ev.currentTarget.dataset.index);
 }
 
 function allowDrop(ev){
@@ -273,33 +120,28 @@ function drop(ev){
 
 ev.preventDefault();
 
-let targetIndex =
-Number(ev.currentTarget.dataset.index);
+let targetIndex = Number(ev.currentTarget.dataset.index);
 
 if(dragIndex === targetIndex) return;
 
-let item =
-data.splice(dragIndex,1)[0];
-
+let item = data.splice(dragIndex,1)[0];
 data.splice(targetIndex,0,item);
 
-localStorage.setItem(
-"notes",
-JSON.stringify(data)
-);
+localStorage.setItem("notes", JSON.stringify(data));
 
 render();
 showToast("Urutan diperbarui");
+
 }
 
-// copy
+// COPY
 function copyText(id){
 let text = document.getElementById(id).innerText;
 navigator.clipboard.writeText(text);
 showToast("Disalin!");
 }
 
-// toast
+// TOAST
 function showToast(msg){
 let toast = document.getElementById("toast");
 toast.innerText = msg;
@@ -310,17 +152,23 @@ toast.style.display = "none";
 },2000);
 }
 
-// search
+// SEARCH (FIX TOTAL)
 document.getElementById("search").addEventListener("keyup", function(){
-let keyword = this.value.toLowerCase();
-let cards = document.querySelectorAll(".card");
 
-cards.forEach(card=>{
-card.style.display = card.innerText.toLowerCase().includes(keyword) ? "block" : "none";
+let keyword = this.value.toLowerCase();
+
+let sections = document.querySelectorAll(".section");
+
+sections.forEach(section=>{
+
+let text = section.innerText.toLowerCase();
+
+section.style.display = text.includes(keyword)
+? "block"
+: "none";
+
 });
+
 });
 
 </script>
-
-</body>
-</html>
