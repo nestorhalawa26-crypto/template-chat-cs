@@ -6,36 +6,54 @@
 <title>NOTEPAD NESTOR</title>
 
 <style>
-body{
+*{
 margin:0;
-font-family:Segoe UI;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
 background:#050816;
-color:white;
+color:#fff;
 padding:20px;
 }
 
+/* HEADER */
 .header{
+max-width:500px;
+margin:auto;
 text-align:center;
-font-size:26px;
-font-weight:bold;
 padding:15px;
+border-radius:15px;
 background:linear-gradient(90deg,#0a1638,#0e3e9d);
-border-radius:12px;
+border:1px solid #3ba7ff;
+font-size:28px;
+font-weight:bold;
 margin-bottom:15px;
 }
 
+/* SEARCH */
 #search{
 width:100%;
-padding:10px;
-border-radius:8px;
-margin-bottom:10px;
+max-width:500px;
+display:block;
+margin:0 auto 10px;
+padding:12px;
+border-radius:10px;
+border:none;
+font-size:16px;
+outline:none;
 }
 
+/* ADD BOX */
 .add-box{
+max-width:500px;
+margin:0 auto 20px;
 background:#081122;
 padding:15px;
-border-radius:10px;
-margin-bottom:15px;
+border-radius:12px;
+border:1px solid #16386d;
 }
 
 .add-box input,
@@ -44,52 +62,100 @@ width:100%;
 margin-bottom:10px;
 padding:10px;
 border-radius:8px;
+border:none;
+outline:none;
 }
 
-button{
-padding:8px;
+.add-box button{
+width:100%;
+padding:10px;
 border:none;
 border-radius:8px;
+background:#00aaff;
+color:#fff;
+font-weight:bold;
 cursor:pointer;
 }
 
+/* CONTAINER */
 .container{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:10px;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:20px;
 }
 
+/* SECTION (KATEGORI WARNA BERBEDA) */
 .section{
-background:#081122;
-padding:10px;
-border-radius:10px;
+border-radius:18px;
+padding:15px;
+cursor:grab;
+transition:.2s;
+border:2px solid rgba(255,255,255,.1);
 }
 
+.section:hover{
+transform:translateY(-3px);
+}
+
+/* warna kategori random */
+.section:nth-child(4n+1){background:#0b1220;}
+.section:nth-child(4n+2){background:#101a33;}
+.section:nth-child(4n+3){background:#0f1f2a;}
+.section:nth-child(4n+4){background:#1a1230;}
+
+/* TITLE */
 .section-title{
-background:white;
-color:black;
-padding:8px;
-border-radius:6px;
 text-align:center;
-margin-bottom:10px;
-}
-
-.card{
-background:black;
+background:#fff;
+color:#000;
 padding:10px;
 border-radius:10px;
+font-weight:bold;
 margin-bottom:10px;
-position:relative;
 }
 
+/* CARD */
+.card{
+background:#000;
+border:1px solid #1f2d4a;
+border-radius:15px;
+padding:15px;
+position:relative;
+margin-bottom:10px;
+}
+
+.card p{
+white-space:pre-line;
+padding-right:90px;
+}
+
+/* BUTTON */
 .copy-btn{
 position:absolute;
 right:10px;
-bottom:10px;
+padding:6px 10px;
+border:none;
+border-radius:8px;
 background:#00aaff;
-color:white;
+color:#fff;
+cursor:pointer;
+font-size:12px;
 }
 
+.copy-btn.copy{bottom:10px;}
+.copy-btn.edit{bottom:45px;background:#ff9800;}
+.copy-btn.del{bottom:80px;background:#f44336;}
+
+/* TOAST */
+.toast{
+position:fixed;
+top:20px;
+right:20px;
+background:#00c853;
+padding:10px 15px;
+border-radius:10px;
+display:none;
+}
 </style>
 </head>
 
@@ -97,68 +163,149 @@ color:white;
 
 <div class="header">📝 NOTEPAD NESTOR</div>
 
-<input id="search" placeholder="Cari...">
+<input id="search" placeholder="🔍 Cari template...">
 
 <div class="add-box">
-<input id="title" placeholder="Kategori">
-<textarea id="text" placeholder="Isi"></textarea>
-<button onclick="addTemplate()">+ TAMBAH</button>
+<input id="title" placeholder="Nama kategori (contoh: BONUS)">
+<textarea id="text" placeholder="Isi template..."></textarea>
+<button onclick="addTemplate()">+ TAMBAH TEMPLATE</button>
 </div>
 
 <div class="container" id="container"></div>
+
+<div class="toast" id="toast">OK</div>
 
 <script>
 
 let data = JSON.parse(localStorage.getItem("notes")) || [];
 
+/* RENDER */
 function render(){
 let container = document.getElementById("container");
 container.innerHTML = "";
 
-data.forEach((item,i)=>{
+data.forEach((item,index)=>{
+
 container.innerHTML += `
-<div class="section">
+<div class="section"
+draggable="true"
+data-index="${index}"
+ondragstart="drag(event)"
+ondragover="allowDrop(event)"
+ondrop="drop(event)">
+
 <div class="section-title">${item.title}</div>
 
 <div class="card">
-${item.text}
-<button class="copy-btn" onclick="copyText(${i})">COPY</button>
-</div>
+<p id="t${index}">${item.text}</p>
 
+<button class="copy-btn copy" onclick="copyText('t${index}')">COPY</button>
+<button class="copy-btn edit" onclick="editTemplate(${index})">EDIT</button>
+<button class="copy-btn del" onclick="deleteTemplate(${index})">HAPUS</button>
+
+</div>
 </div>
 `;
 });
 }
 
-render();
-
+/* ADD */
 function addTemplate(){
-let title = document.getElementById("title").value;
-let text = document.getElementById("text").value;
+let title = document.getElementById("title").value.trim();
+let text = document.getElementById("text").value.trim();
 
-if(!title || !text) return alert("isi dulu");
+if(!title || !text){
+alert("Isi lengkap dulu!");
+return;
+}
 
 data.push({title,text});
-localStorage.setItem("notes", JSON.stringify(data));
+save();
+render();
+showToast("Ditambahkan");
 
 document.getElementById("title").value="";
 document.getElementById("text").value="";
+}
+
+/* EDIT */
+function editTemplate(i){
+let t = prompt("Edit Judul", data[i].title);
+if(t===null) return;
+
+let x = prompt("Edit Isi", data[i].text);
+if(x===null) return;
+
+data[i].title=t;
+data[i].text=x;
+save();
+render();
+showToast("Diedit");
+}
+
+/* DELETE */
+function deleteTemplate(i){
+if(!confirm("Hapus?")) return;
+data.splice(i,1);
+save();
+render();
+showToast("Dihapus");
+}
+
+/* SAVE */
+function save(){
+localStorage.setItem("notes", JSON.stringify(data));
+}
+
+/* DRAG DROP SMOOTH */
+let dragIndex=null;
+
+function drag(ev){
+dragIndex = +ev.currentTarget.dataset.index;
+}
+
+function allowDrop(ev){
+ev.preventDefault();
+}
+
+function drop(ev){
+ev.preventDefault();
+let target = +ev.currentTarget.dataset.index;
+if(dragIndex===target) return;
+
+let item = data.splice(dragIndex,1)[0];
+data.splice(target,0,item);
+
+save();
+render();
+showToast("Urutan berubah");
+}
+
+/* COPY */
+function copyText(id){
+navigator.clipboard.writeText(document.getElementById(id).innerText);
+showToast("Disalin");
+}
+
+/* TOAST */
+function showToast(msg){
+let t=document.getElementById("toast");
+t.innerText=msg;
+t.style.display="block";
+setTimeout(()=>t.style.display="none",1500);
+}
+
+/* SEARCH FIX */
+document.getElementById("search").addEventListener("input",function(){
+let k=this.value.toLowerCase();
+
+document.querySelectorAll(".section").forEach(s=>{
+s.style.display = s.innerText.toLowerCase().includes(k)
+?"block":"none";
+});
+});
 
 render();
-}
-
-function copyText(i){
-navigator.clipboard.writeText(data[i].text);
-alert("copied");
-}
-
-document.getElementById("search").addEventListener("input",function(){
-let val = this.value.toLowerCase();
-document.querySelectorAll(".section").forEach(el=>{
-el.style.display = el.innerText.toLowerCase().includes(val)
-? "block":"none";
-});
-});
 
 </script>
 
