@@ -87,17 +87,15 @@ background:#081122;
 border:1px solid #16386d;
 border-radius:18px;
 padding:15px;
+cursor;
+transition:.2s;
 }
 
-.section-title{
-text-align:center;
-background:#fff;
-color:#000;
-padding:10px;
-border-radius:10px;
-font-weight:bold;
-margin-bottom:10px;
+.section{
+transform(-2px);
+box-shadow:0 0 10px rgba(0,170,255,.4);
 }
+
 
 .card{
 background:#000;
@@ -161,8 +159,48 @@ let data = JSON.parse(localStorage.getItem("notes")) || [];
 
 // render
 function render(){
+
 let container = document.getElementById("container");
 container.innerHTML = "";
+
+data.forEach((item,index)=>{
+
+container.innerHTML += `
+
+<div class="section"
+draggable="true"
+data-index="${index}"
+ondragstart="drag(event)"
+ondragover="allowDrop(event)"
+ondrop="drop(event)">
+
+<div class="section-title">${item.title}</div>
+
+<div class="card">
+
+<p id="t${index}">${item.text}</p>
+
+<button class="copy-btn"
+onclick="copyText('t${index}')">
+COPY </button>
+
+<button class="copy-btn"
+style="bottom:50px;background:#ff9800;"
+onclick="editTemplate(${index})">
+EDIT </button>
+
+<button class="copy-btn"
+style="bottom:90px;background:#f44336;"
+onclick="deleteTemplate(${index})">
+HAPUS </button>
+
+</div>
+</div>
+`;
+});
+
+}
+
 
 data.forEach((item, index)=>{
 container.innerHTML += `
@@ -181,20 +219,77 @@ container.innerHTML += `
 render();
 
 // add template
-function addTemplate(){
-let title = document.getElementById("title").value;
-let text = document.getElementById("text").value;
+function editTemplate(index){
 
-if(!title || !text) return alert("Isi lengkap dulu!");
+let newTitle =
+prompt("Edit Judul", data[index].title);
 
-data.push({title, text});
-localStorage.setItem("notes", JSON.stringify(data));
+if(newTitle === null) return;
 
-document.getElementById("title").value = "";
-document.getElementById("text").value = "";
+let newText =
+prompt("Edit Template", data[index].text);
+
+if(newText === null) return;
+
+data[index].title = newTitle;
+data[index].text = newText;
+
+localStorage.setItem(
+"notes",
+JSON.stringify(data)
+);
 
 render();
-showToast("Template ditambahkan!");
+showToast("Template diperbarui");
+}
+
+function deleteTemplate(index){
+
+if(!confirm("Hapus template ini?")) return;
+
+data.splice(index,1);
+
+localStorage.setItem(
+"notes",
+JSON.stringify(data)
+);
+
+render();
+showToast("Template dihapus");
+}
+
+let dragIndex = null;
+
+function drag(ev){
+dragIndex =
+Number(ev.currentTarget.dataset.index);
+}
+
+function allowDrop(ev){
+ev.preventDefault();
+}
+
+function drop(ev){
+
+ev.preventDefault();
+
+let targetIndex =
+Number(ev.currentTarget.dataset.index);
+
+if(dragIndex === targetIndex) return;
+
+let item =
+data.splice(dragIndex,1)[0];
+
+data.splice(targetIndex,0,item);
+
+localStorage.setItem(
+"notes",
+JSON.stringify(data)
+);
+
+render();
+showToast("Urutan diperbarui");
 }
 
 // copy
