@@ -3,76 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NOTEPAD NESTOR</title>
+<title>Notepad Nestor</title>
 
 <style>
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:'Segoe UI',sans-serif;
+font-family:Arial, sans-serif;
 }
 
 body{
-background:#050816;
-color:#fff;
-padding:20px;
+background:#0b1020;
+color:white;
+padding:15px;
 }
 
 /* HEADER */
 .header{
-max-width:500px;
-margin:auto;
 text-align:center;
-padding:15px;
-border-radius:15px;
-background:linear-gradient(90deg,#0a1638,#0e3e9d);
-border:1px solid #3ba7ff;
-font-size:28px;
+font-size:24px;
 font-weight:bold;
+padding:12px;
+background:#1c2a4a;
+border-radius:12px;
 margin-bottom:15px;
 }
 
-/* SEARCH */
-#search{
+/* INPUT */
+#search, #title, #text{
 width:100%;
-max-width:500px;
-display:block;
-margin:0 auto 10px;
-padding:12px;
-border-radius:10px;
-border:none;
-font-size:16px;
-outline:none;
-}
-
-/* ADD BOX */
-.add-box{
-max-width:500px;
-margin:0 auto 20px;
-background:#081122;
-padding:15px;
-border-radius:12px;
-border:1px solid #16386d;
-}
-
-.add-box input,
-.add-box textarea{
-width:100%;
-margin-bottom:10px;
 padding:10px;
-border-radius:8px;
+margin-bottom:8px;
 border:none;
+border-radius:8px;
 outline:none;
 }
 
-.add-box button{
+button{
 width:100%;
 padding:10px;
 border:none;
 border-radius:8px;
-background:#00aaff;
-color:#fff;
+background:#2f80ed;
+color:white;
 font-weight:bold;
 cursor:pointer;
 }
@@ -80,80 +54,62 @@ cursor:pointer;
 /* CONTAINER */
 .container{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:20px;
-}
-
-/* SECTION (KATEGORI WARNA BERBEDA) */
-.section{
-border-radius:18px;
-padding:15px;
-cursor:grab;
-transition:.2s;
-border:2px solid rgba(255,255,255,.1);
-}
-
-.section:hover{
-transform:translateY(-3px);
-}
-
-/* warna kategori random */
-.section:nth-child(4n+1){background:#0b1220;}
-.section:nth-child(4n+2){background:#101a33;}
-.section:nth-child(4n+3){background:#0f1f2a;}
-.section:nth-child(4n+4){background:#1a1230;}
-
-/* TITLE */
-.section-title{
-text-align:center;
-background:#fff;
-color:#000;
-padding:10px;
-border-radius:10px;
-font-weight:bold;
-margin-bottom:10px;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:10px;
+margin-top:15px;
 }
 
 /* CARD */
+.section{
+background:#151d33;
+padding:10px;
+border-radius:12px;
+border:1px solid #2a3a66;
+}
+
+.section-title{
+background:#fff;
+color:#000;
+padding:6px;
+border-radius:6px;
+text-align:center;
+font-weight:bold;
+margin-bottom:8px;
+}
+
 .card{
-background:#000;
-border:1px solid #1f2d4a;
-border-radius:15px;
-padding:15px;
+background:#0a0f1f;
+padding:10px;
+border-radius:10px;
 position:relative;
-margin-bottom:10px;
+margin-bottom:8px;
 }
 
 .card p{
 white-space:pre-line;
-padding-right:90px;
+font-size:14px;
 }
 
 /* BUTTON */
-.copy-btn{
-position:absolute;
-right:10px;
-padding:6px 10px;
-border:none;
-border-radius:8px;
-background:#00aaff;
-color:#fff;
-cursor:pointer;
+.btn{
+margin-top:5px;
+padding:6px;
 font-size:12px;
+border-radius:6px;
 }
 
-.copy-btn.copy{bottom:10px;}
-.copy-btn.edit{bottom:45px;background:#ff9800;}
-.copy-btn.del{bottom:80px;background:#f44336;}
+.copy{background:#2f80ed;}
+.edit{background:#f39c12;}
+.del{background:#e74c3c;}
 
 /* TOAST */
 .toast{
 position:fixed;
-top:20px;
-right:20px;
-background:#00c853;
-padding:10px 15px;
-border-radius:10px;
+top:15px;
+right:15px;
+background:#27ae60;
+padding:10px;
+border-radius:8px;
 display:none;
 }
 </style>
@@ -163,150 +119,113 @@ display:none;
 
 <div class="header">📝 NOTEPAD NESTOR</div>
 
-<input id="search" placeholder="🔍 Cari template...">
+<input id="search" placeholder="Cari template...">
 
-<div class="add-box">
-<input id="title" placeholder="Nama kategori (contoh: BONUS)">
+<input id="title" placeholder="Kategori">
 <textarea id="text" placeholder="Isi template..."></textarea>
-<button onclick="addTemplate()">+ TAMBAH TEMPLATE</button>
-</div>
+
+<button onclick="add()">+ TAMBAH</button>
 
 <div class="container" id="container"></div>
 
 <div class="toast" id="toast">OK</div>
 
 <script>
-
 let data = JSON.parse(localStorage.getItem("notes")) || [];
 
-/* RENDER */
 function render(){
-let container = document.getElementById("container");
-container.innerHTML = "";
+let c=document.getElementById("container");
+c.innerHTML="";
 
-data.forEach((item,index)=>{
-
-container.innerHTML += `
+data.forEach((d,i)=>{
+c.innerHTML+=`
 <div class="section"
 draggable="true"
-data-index="${index}"
 ondragstart="drag(event)"
-ondragover="allowDrop(event)"
-ondrop="drop(event)">
+ondragover="allow(event)"
+ondrop="drop(event)"
+data-i="${i}">
 
-<div class="section-title">${item.title}</div>
+<div class="section-title">${d.title}</div>
 
 <div class="card">
-<p id="t${index}">${item.text}</p>
+<p>${d.text}</p>
 
-<button class="copy-btn copy" onclick="copyText('t${index}')">COPY</button>
-<button class="copy-btn edit" onclick="editTemplate(${index})">EDIT</button>
-<button class="copy-btn del" onclick="deleteTemplate(${index})">HAPUS</button>
+<button class="btn copy" onclick="copy('${i}')">COPY</button>
+<button class="btn edit" onclick="edit(${i})">EDIT</button>
+<button class="btn del" onclick="del(${i})">HAPUS</button>
+</div>
 
-</div>
-</div>
-`;
+</div>`;
 });
 }
 
-/* ADD */
-function addTemplate(){
-let title = document.getElementById("title").value.trim();
-let text = document.getElementById("text").value.trim();
+function add(){
+let t=document.getElementById("title").value;
+let x=document.getElementById("text").value;
 
-if(!title || !text){
-alert("Isi lengkap dulu!");
-return;
+if(!t||!x)return alert("isi dulu");
+
+data.push({title:t,text:x});
+save();render();
 }
 
-data.push({title,text});
-save();
-render();
-showToast("Ditambahkan");
-
-document.getElementById("title").value="";
-document.getElementById("text").value="";
+function copy(i){
+navigator.clipboard.writeText(data[i].text);
+toast("Copied");
 }
 
-/* EDIT */
-function editTemplate(i){
-let t = prompt("Edit Judul", data[i].title);
-if(t===null) return;
+function edit(i){
+let t=prompt("Kategori",data[i].title);
+let x=prompt("Isi",data[i].text);
+if(!t||!x)return;
 
-let x = prompt("Edit Isi", data[i].text);
-if(x===null) return;
-
-data[i].title=t;
-data[i].text=x;
-save();
-render();
-showToast("Diedit");
+data[i]={title:t,text:x};
+save();render();
 }
 
-/* DELETE */
-function deleteTemplate(i){
-if(!confirm("Hapus?")) return;
+function del(i){
+if(!confirm("hapus?"))return;
 data.splice(i,1);
-save();
-render();
-showToast("Dihapus");
+save();render();
 }
 
-/* SAVE */
+let dragI=null;
+
+function drag(e){
+dragI=e.currentTarget.dataset.i;
+}
+
+function allow(e){e.preventDefault();}
+
+function drop(e){
+let to=e.currentTarget.dataset.i;
+
+let item=data.splice(dragI,1)[0];
+data.splice(to,0,item);
+
+save();render();
+}
+
 function save(){
-localStorage.setItem("notes", JSON.stringify(data));
+localStorage.setItem("notes",JSON.stringify(data));
 }
 
-/* DRAG DROP SMOOTH */
-let dragIndex=null;
-
-function drag(ev){
-dragIndex = +ev.currentTarget.dataset.index;
-}
-
-function allowDrop(ev){
-ev.preventDefault();
-}
-
-function drop(ev){
-ev.preventDefault();
-let target = +ev.currentTarget.dataset.index;
-if(dragIndex===target) return;
-
-let item = data.splice(dragIndex,1)[0];
-data.splice(target,0,item);
-
-save();
-render();
-showToast("Urutan berubah");
-}
-
-/* COPY */
-function copyText(id){
-navigator.clipboard.writeText(document.getElementById(id).innerText);
-showToast("Disalin");
-}
-
-/* TOAST */
-function showToast(msg){
+function toast(m){
 let t=document.getElementById("toast");
-t.innerText=msg;
+t.innerText=m;
 t.style.display="block";
-setTimeout(()=>t.style.display="none",1500);
+setTimeout(()=>t.style.display="none",1200);
 }
 
-/* SEARCH FIX */
-document.getElementById("search").addEventListener("input",function(){
-let k=this.value.toLowerCase();
-
+document.getElementById("search").addEventListener("input",e=>{
+let k=e.target.value.toLowerCase();
 document.querySelectorAll(".section").forEach(s=>{
-s.style.display = s.innerText.toLowerCase().includes(k)
-?"block":"none";
+s.style.display=s.innerText.toLowerCase().includes(k)?"block":"none";
 });
 });
 
 render();
-
 </script>
 
 </body>
